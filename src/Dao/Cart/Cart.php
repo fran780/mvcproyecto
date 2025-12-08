@@ -91,7 +91,7 @@ class Cart extends \Dao\Table
         $productosDisponibles = null;
         $prodsCarretillaAutorizada = null;
         $prodsCarretillaNAutorizada = null;
-         if (!isset($productosCurados[$productId])) {
+        if (!isset($productosCurados[$productId])) {
             return null;
         }
         return $productosCurados[$productId];
@@ -124,12 +124,26 @@ class Cart extends \Dao\Table
 
     public static function getAnonCart(string $anonCod)
     {
-        return self::obtenerRegistros("SELECT a.*, b.crrctd, b.crrprc, b.crrfching FROM products a inner join carretillaanon b on a.productId = b.productId where b.anoncod=:anoncod;", ["anoncod" => $anonCod]);
+        $delta = \Utilities\Cart\CartFns::getUnAuthTimeDelta();
+        $sql = "SELECT a.*, b.crrctd, b.crrprc, b.crrfching
+                FROM products a
+                INNER JOIN carretillaanon b ON a.productId = b.productId
+                WHERE b.anoncod = :anoncod
+                  AND TIME_TO_SEC(TIMEDIFF(now(), b.crrfching)) <= :delta;";
+
+        return self::obtenerRegistros($sql, ["anoncod" => $anonCod, "delta" => $delta]);
     }
 
     public static function getAuthCart(int $usercod)
     {
-        return self::obtenerRegistros("SELECT a.*, b.crrctd, b.crrprc, b.crrfching FROM products a inner join carretilla b on a.productId = b.productId where b.usercod=:usercod;", ["usercod" => $usercod]);
+        $delta = \Utilities\Cart\CartFns::getAuthTimeDelta();
+        $sql = "SELECT a.*, b.crrctd, b.crrprc, b.crrfching
+                FROM products a
+                INNER JOIN carretilla b ON a.productId = b.productId
+                WHERE b.usercod = :usercod
+                  AND TIME_TO_SEC(TIMEDIFF(now(), b.crrfching)) <= :delta;";
+
+        return self::obtenerRegistros($sql, ["usercod" => $usercod, "delta" => $delta]);
     }
 
     public static function addToAuthCart(
