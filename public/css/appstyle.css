@@ -734,6 +734,41 @@ header h1 {
   padding: 0.75rem 1rem;
   font-size: 1.5rem;
 }
+.cart-link {
+  margin-left: auto;
+  margin-right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.cart-link:hover {
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+.cart-icon i {
+  font-size: 1.15rem;
+}
+.cart-badge {
+  min-width: 1.65rem;
+  height: 1.65rem;
+  padding: 0 0.4rem;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #bb1900;
+  background: #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
 main {
   position: relative;
   margin-top: 52px;

@@ -91,6 +91,9 @@ class Cart extends \Dao\Table
         $productosDisponibles = null;
         $prodsCarretillaAutorizada = null;
         $prodsCarretillaNAutorizada = null;
+         if (!isset($productosCurados[$productId])) {
+            return null;
+        }
         return $productosCurados[$productId];
     }
 
@@ -105,7 +108,7 @@ class Cart extends \Dao\Table
         $producto = self::obtenerUnRegistro($validateSql, ["anoncod" => $anonCod, "productId" => $productId]);
         if ($producto) {
             if ($producto["crrctd"] + $amount <= 0) {
-                $deleteSql = "DELETE from carretillaanon where usercod = :usercod and productId = :productId;";
+                $deleteSql = "DELETE from carretillaanon where anoncod = :anoncod and productId = :productId;";
                 return self::executeNonQuery($deleteSql, ["anoncod" => $anonCod, "productId" => $productId]);
             } else {
                 $updateSql = "UPDATE carretillaanon set crrctd = crrctd + :amount where anoncod = :anoncod and productId = :productId";

@@ -5,7 +5,9 @@
             <img src="{{productImgUrl}}" alt="{{productName}}">
             <h2>{{productName}}</h2>
             <p>{{productDescription}}</p>
-            <span class="price">{{productPrice}}</span>
+             <div class="product-meta">
+                <span class="price">{{productPrice}}</span>
+            </div>
             <button class="add-to-cart">Agregar al Carrito</button>
         </div>
         {{endfor productsOnSale}}
@@ -17,7 +19,9 @@
             <img src="{{productImgUrl}}" alt="{{productName}}">
             <h2>{{productName}}</h2>
             <p>{{productDescription}}</p>
-            <span class="price">{{productPrice}}</span>
+            <div class="product-meta">
+                <span class="price">{{productPrice}}</span>
+            </div>
             <button class="add-to-cart">Agregar al Carrito</button>
         </div>
         {{endfor productsHighlighted}}
@@ -29,7 +33,9 @@
             <img src="{{productImgUrl}}" alt="{{productName}}">
             <h2>{{productName}}</h2>
             <p>{{productDescription}}</p>
-            <span class="price">{{productPrice}}</span>
+            <div class="product-meta">
+                <span class="price">{{productPrice}}</span>
+            </div>
             <button class="add-to-cart">Agregar al Carrito</button>
         </div>
         {{endfor productsNew}}

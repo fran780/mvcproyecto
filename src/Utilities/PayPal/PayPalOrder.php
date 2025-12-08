@@ -1,6 +1,6 @@
 <?php
 
-namespace Utilities\Paypal;
+namespace Utilities\PayPal;
 
 class PayPalOrder
 {

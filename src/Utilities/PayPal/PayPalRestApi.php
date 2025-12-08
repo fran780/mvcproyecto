@@ -2,7 +2,7 @@
 
 namespace Utilities\PayPal;
 
-use Utilities\Paypal\PayPalOrder;
+use Utilities\PayPal\PayPalOrder;
 
 class PayPalRestApi
 {

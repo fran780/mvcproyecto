@@ -36,7 +36,10 @@
       </ul>
     </nav>
     {{with login}}
-    <span>{{if ~CART_ITEMS}}<i class="fa-solid fa-cart-shopping"></i>{{~CART_ITEMS}}{{endif ~CART_ITEMS}}</span>
+    <a class="cart-link" href="index.php?page=Checkout_Checkout" aria-label="Ir al carrito de compras">
+      <span class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+      <span class="cart-badge">{{if ~CART_ITEMS}}{{~CART_ITEMS}}{{else}}0{{endif ~CART_ITEMS}}</span>
+    </a>
     <span class="username">{{userName}} <a href="index.php?page=sec_logout"><i class="fas fa-sign-out-alt"></i></a></span>
     {{endwith login}}
   </header>

@@ -6,8 +6,10 @@
     <img src="{{productImgUrl}}" alt="{{productName}}">
     <h2>{{productName}}</h2>
     <p>{{productDescription}}</p>
-    <span class="price">{{productPrice}}</span>
-    <span class="stock">Disponible {{productStock}}</span>
+     <div class="product-meta">
+      <span class="price">{{productPrice}}</span>
+      <span class="stock">Disponible {{productStock}}</span>
+    </div>
     <form action="index.php?page=index" method="post">
         <input type="hidden" name="productId" value="{{productId}}">
         <button type="submit" name="addToCart" class="add-to-cart">
