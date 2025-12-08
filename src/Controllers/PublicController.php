@@ -67,11 +67,25 @@ abstract class PublicController implements IController
     {
         if (\Utilities\Security::isLogged()) {
             $cartItems = \Dao\Cart\Cart::getAuthCart(\Utilities\Security::getUserId());
-            \Utilities\Context::setContext("CART_ITEMS", count($cartItems));
+            $cartCount = array_reduce(
+                $cartItems,
+                function ($carry, $item) {
+                    return $carry + intval($item["crrctd"] ?? 0);
+                },
+                0
+            );
+            \Utilities\Context::setContext("CART_ITEMS", $cartCount);
         } else {
             $annonCod = \Utilities\Cart\CartFns::getAnnonCartCode();
             $cartItems = \Dao\Cart\Cart::getAnonCart($annonCod);
-            \Utilities\Context::setContext("CART_ITEMS", count($cartItems));
+            $cartCount = array_reduce(
+                $cartItems,
+                function ($carry, $item) {
+                    return $carry + intval($item["crrctd"] ?? 0);
+                },
+                0
+            );
+            \Utilities\Context::setContext("CART_ITEMS", $cartCount);
         }
     }
 }
