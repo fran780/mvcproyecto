@@ -124,12 +124,52 @@ class Cart extends \Dao\Table
 
     public static function getAnonCart(string $anonCod)
     {
-        return self::obtenerRegistros("SELECT a.*, b.crrctd, b.crrprc, b.crrfching FROM products a inner join carretillaanon b on a.productId = b.productId where b.anoncod=:anoncod;", ["anoncod" => $anonCod]);
+        $items = self::obtenerRegistros(
+            "SELECT a.*, b.crrctd, b.crrprc, b.crrfching FROM products a 
+            inner join carretillaanon b on a.productId = b.productId where b.anoncod=:anoncod;",
+            ["anoncod" => $anonCod]
+        );
+
+        return array_map(function ($item) {
+            $item["crrctd"] = intval($item["crrctd"] ?? 0);
+            $item["crrprc"] = floatval($item["crrprc"] ?? 0);
+            return $item;
+        }, $items);
     }
 
     public static function getAuthCart(int $usercod)
     {
-        return self::obtenerRegistros("SELECT a.*, b.crrctd, b.crrprc, b.crrfching FROM products a inner join carretilla b on a.productId = b.productId where b.usercod=:usercod;", ["usercod" => $usercod]);
+        $items = self::obtenerRegistros(
+            "SELECT a.*, b.crrctd, b.crrprc, b.crrfching FROM products a
+            inner join carretilla b on a.productId = b.productId where b.usercod=:usercod;",
+            ["usercod" => $usercod]
+        );
+
+        return array_map(function ($item) {
+            $item["crrctd"] = intval($item["crrctd"] ?? 0);
+            $item["crrprc"] = floatval($item["crrprc"] ?? 0);
+            return $item;
+        }, $items);
+    }
+
+    public static function getAnonCartCount(string $anonCod): int
+    {
+        $result = self::obtenerUnRegistro(
+            "SELECT COALESCE(SUM(crrctd), 0) as items FROM carretillaanon where anoncod = :anoncod;",
+            ["anoncod" => $anonCod]
+        );
+
+        return intval($result["items"] ?? 0);
+    }
+
+    public static function getAuthCartCount(int $usercod): int
+    {
+        $result = self::obtenerUnRegistro(
+            "SELECT COALESCE(SUM(crrctd), 0) as items FROM carretilla where usercod = :usercod;",
+            ["usercod" => $usercod]
+        );
+
+        return intval($result["items"] ?? 0);
     }
 
     public static function addToAuthCart(
