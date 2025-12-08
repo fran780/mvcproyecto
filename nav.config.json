@@ -19,7 +19,7 @@
   "private": [
     {
       "id":"Menu_PaymentCheckout",
-      "nav_url": "index.php?page=Checkout_Checkout",
+      "nav_url": "index.php?page=Checkout_Cart",
       "nav_label":"<i class=\"fas fa-table\"></i>&nbsp;Carretilla Compra"
     },
     

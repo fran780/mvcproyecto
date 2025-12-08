@@ -32,7 +32,7 @@
         {{endfor PUBLIC_NAVIGATION}}
       </ul>
     </nav>
-    <a class="cart-link" href="index.php?page=Checkout_Checkout" aria-label="Ir al carrito de compras">
+    <a class="cart-link" href="index.php?page=Checkout_Cart" aria-label="Ir al carrito de compras">
       <span class="cart-icon"><i class="fa-solid fa-cart-shopping"></i></span>
       <span class="cart-badge">{{if ~CART_ITEMS}}{{~CART_ITEMS}}{{else}}{{endif ~CART_ITEMS}}</span>
     </a>
