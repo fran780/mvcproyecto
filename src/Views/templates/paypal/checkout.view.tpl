@@ -34,7 +34,7 @@
   </div>
   <div class="row">
     <form action="index.php?page=checkout_checkout" method="post" class="col-12 right">
-      <button type="submit">Place Order</button>
+      <button type="submit">Ir al checkout</button>
     </form>
   </div>
 </section>

@@ -5,6 +5,8 @@ namespace Controllers\Checkout;
 use Controllers\PublicController;
 use Dao\Cart\Cart;
 use Utilities\Security;
+use Utilities\Site;
+use Utilities\Context;
 
 class Checkout extends PublicController
 {
@@ -18,36 +20,67 @@ class Checkout extends PublicController
         
         */
         $viewData = array();
+        $isLogged = Security::isLogged();
+        $anonCartCode = $isLogged ? null : \Utilities\Cart\CartFns::getAnnonCartCode();
 
-        $carretilla = Cart::getAuthCart(Security::getUserId());
+        $carretilla = $isLogged
+            ? Cart::getAuthCart(Security::getUserId())
+            : Cart::getAnonCart($anonCartCode);
         if ($this->isPostBack()) {
             $processPayment = true;
             if (isset($_POST["removeOne"]) || isset($_POST["addOne"])) {
                 $productId = intval($_POST["productId"]);
                 $productoDisp = Cart::getProductoDisponible($productId);
                 $amount = isset($_POST["removeOne"]) ? -1 : 1;
-                if ($amount == 1) {
-                    if ($productoDisp["productStock"] - $amount >= 0) {
-                        Cart::addToAuthCart(
-                            $productId,
-                            Security::getUserId(),
-                            $amount,
-                            $productoDisp["productPrice"]
-                        );
+                if ($productoDisp) {
+                    if ($amount == 1) {
+                        if ($productoDisp["productStock"] - $amount >= 0) {
+                            if ($isLogged) {
+                                Cart::addToAuthCart(
+                                    $productId,
+                                    Security::getUserId(),
+                                    $amount,
+                                    $productoDisp["productPrice"]
+                                );
+                            } else {
+                                Cart::addToAnonCart(
+                                    $productId,
+                                    $anonCartCode,
+                                    $amount,
+                                    $productoDisp["productPrice"]
+                                );
+                            }
+                        }
+                    } else {
+                        if ($isLogged) {
+                            Cart::addToAuthCart(
+                                $productId,
+                                Security::getUserId(),
+                                $amount,
+                                $productoDisp["productPrice"]
+                            );
+                        } else {
+                            Cart::addToAnonCart(
+                                $productId,
+                                $anonCartCode,
+                                $amount,
+                                $productoDisp["productPrice"]
+                            );
+                        }
                     }
-                } else {
-                    Cart::addToAuthCart(
-                        $productId,
-                        Security::getUserId(),
-                        $amount,
-                        $productoDisp["productPrice"]
-                    );
                 }
-                $carretilla = Cart::getAuthCart(Security::getUserId());
+                $carretilla = $isLogged
+                    ? Cart::getAuthCart(Security::getUserId())
+                    : Cart::getAnonCart($anonCartCode);
                 $processPayment = false;
             }
 
             if ($processPayment) {
+                if (!$isLogged) {
+                    $redirTo = urlencode(Context::getContextByKey("request_uri"));
+                    Site::redirectTo("index.php?page=sec.login&redirto=" . $redirTo);
+                    return;
+                }
                 $PayPalOrder = new \Utilities\PayPal\PayPalOrder(
                     "test" . (time() - 10000000),
                     "http://localhost:8080/proyectofinal/index.php?page=Checkout_Error",
