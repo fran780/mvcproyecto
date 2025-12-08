@@ -100,13 +100,14 @@ class Checkout extends PublicController
                     );
                 }*/
                 foreach ($carretilla as $producto) {
+                    $cantidad = intval($producto["crrctd"]);
                     $PayPalOrder->addItem(
                         $producto["productName"],
                         $producto["productDescription"],
                         $producto["productId"],
                         $producto["crrprc"],
                         0,
-                        $producto["crrctd"],
+                        $cantidad,
                         "DIGITAL_GOODS"
                     );
                 }
@@ -132,10 +133,12 @@ class Checkout extends PublicController
         $total = 0;
         $cartItemCount = 0;
         foreach ($carretilla as $prod) {
+            $cantidad = intval($prod["crrctd"]);
             $prod["row"] = $counter;
-            $prod["subtotal"] = number_format($prod["crrprc"] * $prod["crrctd"], 2);
-            $total += $prod["crrprc"] * $prod["crrctd"];
-            $cartItemCount += intval($prod["crrctd"]);
+            $prod["crrctd"] = $cantidad;
+            $prod["subtotal"] = number_format($prod["crrprc"] * $cantidad, 2);
+            $total += $prod["crrprc"] * $cantidad;
+            $cartItemCount += $cantidad;
             $prod["crrprc"] = number_format($prod["crrprc"], 2);
             $finalCarretilla[] = $prod;
             $counter++;
