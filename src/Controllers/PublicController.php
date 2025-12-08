@@ -66,12 +66,12 @@ abstract class PublicController implements IController
     protected function getCartCounter()
     {
         if (\Utilities\Security::isLogged()) {
-            $cartItems = \Dao\Cart\Cart::getAuthCart(\Utilities\Security::getUserId());
-            \Utilities\Context::setContext("CART_ITEMS", count($cartItems));
+            $cartCount = \Dao\Cart\Cart::getAuthCartCount(\Utilities\Security::getUserId());
+            \Utilities\Context::setContext("CART_ITEMS", $cartCount);
         } else {
             $annonCod = \Utilities\Cart\CartFns::getAnnonCartCode();
-            $cartItems = \Dao\Cart\Cart::getAnonCart($annonCod);
-            \Utilities\Context::setContext("CART_ITEMS", count($cartItems));
+            $cartCount = \Dao\Cart\Cart::getAnonCartCount($annonCod);
+            \Utilities\Context::setContext("CART_ITEMS", $cartCount);
         }
     }
 }
