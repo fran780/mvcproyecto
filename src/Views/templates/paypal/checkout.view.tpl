@@ -33,9 +33,16 @@
     <span class="col-2 right">{{total}}</span>
   </div>
   <div class="row">
+    {{if isLogged}}
     <form action="index.php?page=checkout_checkout" method="post" class="col-12 right">
       <button type="submit">Ir al checkout</button>
     </form>
+    {{endif isLogged}}
+    {{ifnot isLogged}}
+    <div class="col-12 right">
+      <a class="button" href="{{loginUrl}}">Inicia sesión para continuar</a>
+    </div>
+    {{endifnot isLogged}}
   </div>
 </section>
 

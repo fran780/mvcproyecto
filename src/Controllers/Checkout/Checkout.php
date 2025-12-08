@@ -72,6 +72,7 @@ class Checkout extends PublicController
                 $carretilla = $isLogged
                     ? Cart::getAuthCart(Security::getUserId())
                     : Cart::getAnonCart($anonCartCode);
+                $this->getCartCounter();
                 $processPayment = false;
             }
 
@@ -129,16 +130,22 @@ class Checkout extends PublicController
         $finalCarretilla = [];
         $counter = 1;
         $total = 0;
+        $cartItemCount = 0;
         foreach ($carretilla as $prod) {
             $prod["row"] = $counter;
             $prod["subtotal"] = number_format($prod["crrprc"] * $prod["crrctd"], 2);
             $total += $prod["crrprc"] * $prod["crrctd"];
+            $cartItemCount += intval($prod["crrctd"]);
             $prod["crrprc"] = number_format($prod["crrprc"], 2);
             $finalCarretilla[] = $prod;
             $counter++;
         }
+        Context::setContext("CART_ITEMS", $cartItemCount);
         $viewData["carretilla"] = $finalCarretilla;
         $viewData["total"] = number_format($total, 2);
+        $viewData["isLogged"] = $isLogged;
+        $viewData["loginUrl"] = "index.php?page=sec.login&redirto="
+            . urlencode(Context::getContextByKey("request_uri"));
         \Views\Renderer::render("paypal/checkout", $viewData);
     }
 }
