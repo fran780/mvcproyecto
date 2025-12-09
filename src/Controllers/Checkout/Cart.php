@@ -3,7 +3,7 @@
 namespace Controllers\Checkout;
 
 use Controllers\PublicController;
-use Dao\Cart\Cart;
+use Dao\Cart\Cart as CartDao;
 use Utilities\Cart\CartFns;
 use Utilities\Security;
 use Utilities\Site;
@@ -24,7 +24,7 @@ class Cart extends PublicController
         $counter = 1;
         $total = 0;
         foreach ($carretilla as $prod) {
-            $productoDisp = Cart::getProductoDisponible($prod["productId"]);
+           $productoDisp = CartDao::getProductoDisponible($prod["productId"]);
             $unitPrice = floatval($prod["crrprc"]);
             $prod["row"] = $counter;
             $prod["subtotal"] = number_format($unitPrice * $prod["crrctd"], 2);
@@ -46,10 +46,10 @@ class Cart extends PublicController
     private function getCurrentCart(): array
     {
         if (Security::isLogged()) {
-            return Cart::getAuthCart(Security::getUserId());
+            return CartDao::getAuthCart(Security::getUserId());
         }
         $annonCod = CartFns::getAnnonCartCode();
-        return Cart::getAnonCart($annonCod);
+        return CartDao::getAnonCart($annonCod);
     }
 
     private function handleCartActions(): void
@@ -67,7 +67,7 @@ class Cart extends PublicController
 
         if (isset($_POST["removeOne"]) || isset($_POST["addOne"])) {
             $productId = intval($_POST["productId"]);
-            $productoDisp = Cart::getProductoDisponible($productId);
+            $productoDisp = CartDao::getProductoDisponible($productId);
             $amount = isset($_POST["removeOne"]) ? -1 : 1;
 
             if (!$productoDisp) {
@@ -81,7 +81,7 @@ class Cart extends PublicController
             $price = $productoDisp["productPrice"] ?? 0;
 
             if (Security::isLogged()) {
-                Cart::addToAuthCart(
+                CartDao::addToAuthCart(
                     $productId,
                     Security::getUserId(),
                     $amount,
@@ -89,7 +89,7 @@ class Cart extends PublicController
                 );
             } else {
                 $anonCod = CartFns::getAnnonCartCode();
-                Cart::addToAnonCart(
+                CartDao::addToAnonCart(
                     $productId,
                     $anonCod,
                     $amount,

@@ -54,7 +54,7 @@
       {{endif showAction}}
       <button class="col-12 col-m-2" type="button" id="btnCancelar">
         {{if showAction}}Cancelar{{endif showAction}}
-        {{ifnot showAction}}Regresar{{endif not showAction}}
+        {{ifnot showAction}}Regresar{{endifnot showAction}}
       </button>
     </div>
 

@@ -49,7 +49,7 @@
 
     <div class="row my-2 align-center">
       <label class="col-12 col-m-3" for="productImgUrl">URL Imagen</label>
-      <input class="col-12 col-m-9" {{readonly}} type="url" name="productImgUrl" id="productImgUrl" value="{{productImgUrl}}" />
+      <input class="col-12 col-m-9" {{readonly}} type="text" name="productImgUrl" id="productImgUrl" value="{{productImgUrl}}" />
       {{if error_productImgUrl}}
       <div class="col-12 col-m-9 offset-m-3 error">{{error_productImgUrl}}</div>
       {{endif error_productImgUrl}}
@@ -74,7 +74,7 @@
       {{endif showAction}}
       <button class="col-12 col-m-2" type="button" id="btnCancelar">
         {{if showAction}}Cancelar{{endif showAction}}
-        {{ifnot showAction}}Regresar{{endif not showAction}}
+        {{ifnot showAction}}Regresar{{endifnot showAction}}
       </button>
     </div>
 

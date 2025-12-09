@@ -41,6 +41,9 @@ class Security
     }
     public static function isAuthorized($userId, $function, $type = 'FNC'): bool
     {
+        if (self::isInRol($userId, 'ADM')) {
+            return true;
+        }
         if (\Utilities\Context::getContextByKey("DEVELOPMENT") == "1") {
             $functionInDb = DaoSecurity::getFeature($function);
             if (!$functionInDb) {
